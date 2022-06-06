@@ -131,6 +131,7 @@ html .form-select:focus {
 
 .table td {
   padding: 18px 20px;
+  vertical-align: middle;
   font-family: 'Open sans';
   font-style: normal;
   font-weight: 400;
@@ -170,7 +171,7 @@ html .form-select:focus {
   padding: 0;
 }
 
-.btn-change:hover {
+.btn-edit:hover {
   color: var(--color_primary);
 }
 
@@ -229,6 +230,7 @@ html .form-select:focus {
 
 .modal-header {
   position: relative;
+  justify-content: start;
   padding: 24px 30px 7px 30px;
   border-bottom: none;
 }
@@ -276,6 +278,10 @@ html .form-select:focus {
   background-color: rgba(200, 197, 209, .3);
 }
 
+.modal__list-add-contact {
+  margin: 0;
+}
+
 .modal__item {
   display: flex;
   background-color: inherit;
@@ -294,6 +300,7 @@ html .form-select:focus {
   font-size: 12px;
   line-height: 16px;
   color: var(--color_dark);
+  cursor: pointer;
 }
 
 .modal__item .btn {
@@ -355,6 +362,16 @@ html .form-select:focus {
 .modal__btn-add-contact:hover .circle {
   background-color: var(--color_primary);
   color: var(--color_white);
+}
+
+.modal__info {
+  margin-bottom: 9px;
+  align-self: center;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 14px;
+  color: #f06a4d;
 }
 
 .modal__btn-submit {
