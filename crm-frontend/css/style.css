@@ -121,12 +121,38 @@ html .form-select:focus {
 
 .table th {
   padding: 8px 20px;
+}
+
+.column-title {
+  /* padding: 8px 20px; */
   font-family: 'Open sans';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   color: var(--color_grey_txt);
+  border-bottom: none;
+}
+
+.th-btn {
+  padding: 0;
+  text-align: inherit;
+  color: var(--color_grey_txt);
+  background-color: inherit;
+  border: none;
+  transition: color var(--fast);
+}
+
+.th-btn:hover {
+  color: var(--color_primary);
+}
+
+.th-svg path {
+  transition: fill var(--fast);
+}
+
+.th-btn:hover .th-svg path {
+  fill: var(--color_primary);
 }
 
 .table td {
@@ -140,6 +166,28 @@ html .form-select:focus {
   color: var(--color_dark);
 }
 
+.table .td-id {
+  color: var(--color_grey_txt);
+}
+
+.td-contacts svg:hover g,
+.td-contacts svg:hover path {
+  opacity: 1;
+}
+
+.container-date {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.td-date {
+  margin-right: 8px;
+}
+
+.td-time {
+  color: var(--color_grey_txt);
+}
+
 .table>:not(:first-child) {
   border-top: none;
 }
@@ -150,18 +198,27 @@ html .form-select:focus {
 
 .tbody-ico {
   margin-right: 5px;
+  vertical-align: baseline;
   cursor: pointer;
 }
 
-.column-title {
-  cursor: pointer;
-}
-
-.column-title:hover {
-  color: var(--color_primary);
+td .contacts-ico-btn {
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 8px;
+  line-height: 11px;
+  color: var(--color_dark);
+  background-color: inherit;
+  border-radius: 50%;
+  border-color: var(--color_primary);
 }
 
 .btn-group-td {
+  flex-wrap: wrap;
   column-gap: 30px;
 }
 
@@ -236,10 +293,19 @@ html .form-select:focus {
 }
 
 .modal-title {
+  margin-right: 10px;
   font-family: 'Open Sans';
   font-weight: 700;
   font-size: 18px;
   line-height: 25px;
+}
+
+.modal-header span {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color_grey_txt);
 }
 
 .modal__btn-close {
@@ -261,21 +327,25 @@ html .form-select:focus {
   border: none;
   border-bottom: 1px solid var(--color_grey_txt);
   font-family: 'Open Sans';
-  font-weight: 400;
+  font-weight: 600;
   font-size: 14px;
   line-height: 19px;
-  color: var(--color_grey_txt);
 }
 
 .modal__form-input:last-child {
   margin-bottom: 0;
 }
 
+.form-control.is-invalid {
+  border-color: #f06a4d;
+  background-image: none;
+}
+
 .modal__contacts {
   display: flex;
   flex-direction: column;
   margin-bottom: 25px;
-  background-color: rgba(200, 197, 209, .3);
+  background-color: rgba(200, 197, 209, .2);
 }
 
 .modal__list-add-contact {
@@ -301,6 +371,15 @@ html .form-select:focus {
   line-height: 16px;
   color: var(--color_dark);
   cursor: pointer;
+  background-color: #e7e5eb;
+}
+
+.form-select option {
+  background-color: #f4f3f6;
+}
+
+.modal__contact-input {
+  background-color: inherit;
 }
 
 .modal__item .btn {
@@ -415,4 +494,42 @@ html .form-select:focus {
 
 .modal__btn-cancel:hover {
   color: #F06A4D;
+}
+
+@media (max-width: 767px) {
+
+  .header__container {
+    justify-content: center;
+  }
+
+  .header__logo {
+    margin-right: 0;
+  }
+
+  .header__form {
+    display: none;
+  }
+
+  .section {
+    position: relative;
+  }
+
+  .container {
+    overflow-x: auto;
+  }
+
+  .table {
+    margin-bottom: 186px;
+  }
+
+  .btn-modal {
+    position: absolute;
+    margin-bottom: 0;
+    bottom: 60px;
+  }
+
+  .modal-dialog {
+    width: calc(100% - 1rem);
+  }
+
 }
