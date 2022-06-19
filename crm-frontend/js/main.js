@@ -304,10 +304,10 @@ getClientsArray();
 
 // Сортировка таблицы
 function sortBy() {
-  const idTh = document.querySelector('#idColumnTitle');
-  const fullNameTh = document.querySelector('#fullNameColumnTitle');
-  const dateTh = document.querySelector('#dateColumnTitle');
-  const changesTh = document.querySelector('#changesColumnTitle');
+  const idTh = document.querySelector('#idColumnTitle'),
+    fullNameTh = document.querySelector('#fullNameColumnTitle'),
+    dateTh = document.querySelector('#dateColumnTitle'),
+    changesTh = document.querySelector('#changesColumnTitle');
   let sortId = 0;
   let sortFullname = 0;
   let sortDate = 0;
@@ -436,34 +436,39 @@ function createClientObject() {
 }
 
 // Модальные окна
-const clientModal = document.getElementById('clientModal');
-const modalHeader = clientModal.querySelector('.modal-header');
-const modalTitle = clientModal.querySelector('.modal-title');
-const idSpan = document.createElement('span');
-const modalBody = clientModal.querySelector('.modal-body');
-const textModal = document.createElement('p');
-const modalForm = clientModal.querySelector('.modal__form-container');
-const surnameInput = document.querySelector(`#surnameInput`);
-const nameInput = document.querySelector(`#nameInput`);
-const lastnameInput = document.querySelector(`#lastnameInput`);
-const modalContacts = clientModal.querySelector('.modal__contacts');
-const modalContactList = clientModal.querySelector('.modal__list');
-const errorDisplay = clientModal.querySelector('#errorDisplay');
-const modalBtnSubmit = clientModal.querySelector('.modal__btn-submit');
+const clientModal = document.getElementById('clientModal'),
+  modalHeader = clientModal.querySelector('.modal-header'),
+  modalTitle = clientModal.querySelector('.modal-title'),
+  idSpan = document.createElement('span'),
+  modalBody = clientModal.querySelector('.modal-body'),
+  textModal = document.createElement('p'),
+  modalForm = clientModal.querySelector('.modal__form-container'),
+  surnameInput = document.querySelector(`#surnameInput`),
+  nameInput = document.querySelector(`#nameInput`),
+  lastnameInput = document.querySelector(`#lastnameInput`),
+  modalContacts = clientModal.querySelector('.modal__contacts'),
+  modalContactList = clientModal.querySelector('.modal__list'),
+  errorDisplay = clientModal.querySelector('#errorDisplay'),
+  newClientSubmit = document.querySelector('#newClientSubmit'),
+  editClientSubmit = document.querySelector('#editClientSubmit'),
+  deleteClientSubmit = document.querySelector('#deleteClientSubmit');
 
 // Появление модального окна
 clientModal.addEventListener('show.bs.modal', function (event) {
 
-  const button = event.relatedTarget;
-  const action = button.getAttribute('data-bs-action');
-  const id = button.getAttribute('data-bs-id');
+  const button = event.relatedTarget,
+    action = button.getAttribute('data-bs-action'),
+    id = button.getAttribute('data-bs-id');
 
   if (action === 'new') {
     modalTitle.textContent = 'Новый клиент';
     modalForm.classList.remove('visually-hidden');
     modalContacts.classList.remove('visually-hidden');
-    modalBtnSubmit.textContent = 'Сохранить';
-    createNewClient();
+    newClientSubmit.classList.remove('visually-hidden');
+    newClientSubmit.onclick = (e) => {
+      e.preventDefault();
+      doRequest(action);
+    };
 
   } else if (action === 'edit') {
     idSpan.textContent = `ID:${id}`;
@@ -475,16 +480,16 @@ clientModal.addEventListener('show.bs.modal', function (event) {
     modalTitle.after(idSpan);
     modalForm.classList.remove('visually-hidden');
     modalContacts.classList.remove('visually-hidden');
-    modalBtnSubmit.textContent = 'Сохранить';
+    editClientSubmit.classList.remove('visually-hidden');
 
     for (let contact of edited.contacts) {
-      const contactsSelect = createContactsSelect();
-      const contactItem = createNewElement('li', [], ['list-group-item', 'input-group', 'modal__item']);
-      const contactInput = createNewElement('input', [], ['form-control']);
-      const contactCloseBtn = createNewElement('button', [{ name: 'type', value: 'button' }], ['btn']);
-      const ns = "http://www.w3.org/2000/svg";
-      const svgCross = document.createElementNS(ns, 'svg');
-      const pathCross = document.createElementNS(ns, 'path');
+      const contactsSelect = createContactsSelect(),
+        contactItem = createNewElement('li', [], ['list-group-item', 'input-group', 'modal__item']),
+        contactInput = createNewElement('input', [], ['form-control']),
+        contactCloseBtn = createNewElement('button', [{ name: 'type', value: 'button' }], ['btn']),
+        ns = "http://www.w3.org/2000/svg",
+        svgCross = document.createElementNS(ns, 'svg'),
+        pathCross = document.createElementNS(ns, 'path');
 
       svgCross.setAttribute('width', 16);
       svgCross.setAttribute('height', 16);
@@ -505,17 +510,23 @@ clientModal.addEventListener('show.bs.modal', function (event) {
         contactItem.remove();
       })
     }
-    editClient(id);
+    editClientSubmit.onclick = (e) => {
+      e.preventDefault();
+      doRequest(action, id);
+    };
 
   } else if (action === 'delete') {
     modalHeader.classList.add('d-flex', 'justify-content-center');
     modalForm.classList.add('visually-hidden');
     modalContacts.classList.add('visually-hidden');
+    deleteClientSubmit.classList.remove('visually-hidden');
     modalTitle.textContent = 'Удалить клиента';
     textModal.textContent = 'Вы действительно хотите удалить данного клиента?';
     modalBody.append(textModal);
-    modalBtnSubmit.textContent = 'Удалить';
-    deleteClient(id);
+    deleteClientSubmit.onclick = (e) => {
+      e.preventDefault();
+      doRequest(action, id);
+    };
   }
 })
 
@@ -531,6 +542,11 @@ clientModal.addEventListener('hidden.bs.modal', function (event) {
   modalContacts.classList.add('visually-hidden');
   idSpan.remove();
   textModal.remove();
+  surnameInput.classList.remove('is-invalid');
+  nameInput.classList.remove('is-invalid');
+  newClientSubmit.classList.add('visually-hidden');
+  editClientSubmit.classList.add('visually-hidden');
+  deleteClientSubmit.classList.add('visually-hidden');
 })
 
 // Валидация полей ФИО клиента
@@ -579,47 +595,58 @@ function validateContactsInputs() {
 }
 
 // Запрос на добавление клиента
-function createNewClient() {
-  document.querySelector('.modal-content').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const validate = validateClientInputs();
-    const validateContacts = validateContactsInputs();
-    if (validate === false || validateContacts.includes('false')) return;
-    const newClient = createClientObject();
-    await fetch(`${url}/api/clients`, {
-      method: 'POST',
-      body: JSON.stringify(newClient),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-  })
+async function createNewClient() {
+  const validate = validateClientInputs();
+  const validateContacts = validateContactsInputs();
+  if (validate === false || validateContacts.includes('false')) return;
+  const newClient = createClientObject();
+  await fetch(`${url}/api/clients`, {
+    method: 'POST',
+    body: JSON.stringify(newClient),
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  const modalInstance = bootstrap.Modal.getInstance(clientModal);
+  modalInstance.hide();
+  window.location.reload();
 }
 
 // Запрос на удаление клиента
-function deleteClient(id) {
-  document.querySelector('.modal-content').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await fetch(`${url}/api/clients/${id}`, {
-      method: 'DELETE',
-    })
+async function deleteClient(id) {
+  await fetch(`${url}/api/clients/${id}`, {
+    method: 'DELETE',
   })
+  const modalInstance = bootstrap.Modal.getInstance(clientModal);
+  modalInstance.hide();
+  window.location.reload();
 }
 
 // Запрос на редактирование клиента
-function editClient(id) {
-  document.querySelector('.modal-content').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const validate = validateClientInputs();
-    const validateContacts = validateContactsInputs();
-    if (validate === false || validateContacts.includes('false')) return;
-    const editClient = createClientObject();
-    await fetch(`${url}/api/clients/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(editClient),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+async function editClient(id) {
+  const validate = validateClientInputs();
+  const validateContacts = validateContactsInputs();
+  if (validate === false || validateContacts.includes('false')) return;
+  const editClient = createClientObject();
+  await fetch(`${url}/api/clients/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(editClient),
+    headers: {
+      'Content-Type': 'application/json',
+    }
   })
+  const modalInstance = bootstrap.Modal.getInstance(clientModal);
+  modalInstance.hide();
+  window.location.reload();
+}
+
+// Выбор типа запроса
+function doRequest(action, id) {
+  if (action === 'new') {
+    createNewClient()
+  } else if (action === 'edit') {
+    editClient(id)
+  } else if (action === 'delete') {
+    deleteClient(id)
+  }
 }
