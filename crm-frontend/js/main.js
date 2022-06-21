@@ -454,7 +454,7 @@ const clientModal = document.getElementById('clientModal'),
   editClientSubmit = document.querySelector('#editClientSubmit'),
   deleteClientSubmit = document.querySelector('#deleteClientSubmit');
 
-  const spinner = createNewElement('span', [{name: 'role', value: 'status'}, {name: 'aria-hidden', value: 'true'}], ['spinner-border', 'spinner-border-sm']);
+const spinner = createNewElement('span', [{ name: 'role', value: 'status' }, { name: 'aria-hidden', value: 'true' }], ['spinner-border', 'spinner-border-sm']);
 
 // Появление модального окна
 clientModal.addEventListener('show.bs.modal', function (event) {

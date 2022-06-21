@@ -29,8 +29,8 @@ const modalHeader = document.querySelector('.modal-header'),
   lastnameInput = document.querySelector(`#lastnameInput`),
   modalContacts = document.querySelector('.modal__contacts'),
   modalContactList = document.querySelector('.modal__list');
-  cardLinkInput = document.querySelector('#copyLinkInput');
-  copyLinkBtn = document.querySelector('#copyLinkBtn');
+cardLinkInput = document.querySelector('#copyLinkInput');
+copyLinkBtn = document.querySelector('#copyLinkBtn');
 
 async function createClientCard() {
   const url = 'http://localhost:3000';
