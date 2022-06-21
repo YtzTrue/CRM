@@ -182,8 +182,9 @@ function addClientToList(arr) {
 
     // ФИО
     const fullNameCell = document.createElement('td');
-    const fullName = `${client.surname} ${client.name} ${client.lastName}`;
-    fullNameCell.innerHTML = fullName;
+    const fullName = createNewElement('a', [{ name: 'href', value: `card.html?id=${id}` }, { name: 'target', value: '_blank' }], ['td-link']);
+    fullName.innerText = `${client.surname} ${client.name} ${client.lastName}`;
+    fullNameCell.append(fullName);
     clientItem.append(fullNameCell);
 
     // Дата и время создания
@@ -453,6 +454,8 @@ const clientModal = document.getElementById('clientModal'),
   editClientSubmit = document.querySelector('#editClientSubmit'),
   deleteClientSubmit = document.querySelector('#deleteClientSubmit');
 
+  const spinner = createNewElement('span', [{name: 'role', value: 'status'}, {name: 'aria-hidden', value: 'true'}], ['spinner-border', 'spinner-border-sm']);
+
 // Появление модального окна
 clientModal.addEventListener('show.bs.modal', function (event) {
 
@@ -547,6 +550,7 @@ clientModal.addEventListener('hidden.bs.modal', function (event) {
   newClientSubmit.classList.add('visually-hidden');
   editClientSubmit.classList.add('visually-hidden');
   deleteClientSubmit.classList.add('visually-hidden');
+  spinner.remove();
 })
 
 // Валидация полей ФИО клиента
@@ -599,6 +603,7 @@ async function createNewClient() {
   const validate = validateClientInputs();
   const validateContacts = validateContactsInputs();
   if (validate === false || validateContacts.includes('false')) return;
+  newClientSubmit.prepend(spinner);
   const newClient = createClientObject();
   await fetch(`${url}/api/clients`, {
     method: 'POST',
@@ -607,6 +612,7 @@ async function createNewClient() {
       'Content-Type': 'application/json',
     }
   });
+  spinner.remove();
   const modalInstance = bootstrap.Modal.getInstance(clientModal);
   modalInstance.hide();
   window.location.reload();
@@ -614,9 +620,11 @@ async function createNewClient() {
 
 // Запрос на удаление клиента
 async function deleteClient(id) {
+  deleteClientSubmit.prepend(spinner);
   await fetch(`${url}/api/clients/${id}`, {
     method: 'DELETE',
-  })
+  });
+  spinner.remove();
   const modalInstance = bootstrap.Modal.getInstance(clientModal);
   modalInstance.hide();
   window.location.reload();
@@ -628,13 +636,15 @@ async function editClient(id) {
   const validateContacts = validateContactsInputs();
   if (validate === false || validateContacts.includes('false')) return;
   const editClient = createClientObject();
+  editClientSubmit.prepend(spinner);
   await fetch(`${url}/api/clients/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(editClient),
     headers: {
       'Content-Type': 'application/json',
     }
-  })
+  });
+  spinner.remove();
   const modalInstance = bootstrap.Modal.getInstance(clientModal);
   modalInstance.hide();
   window.location.reload();

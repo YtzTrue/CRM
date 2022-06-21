@@ -180,6 +180,21 @@ html .form-select:focus {
   flex-wrap: wrap;
 }
 
+.td-link {
+  font-family: 'Open sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--color_dark);
+  text-decoration: none;
+  transition: color var(--fast);
+}
+
+.td-link:hover {
+  color: var(--color_primary);
+}
+
 .td-date {
   margin-right: 8px;
 }
@@ -350,6 +365,7 @@ td .contacts-ico-btn {
 
 .modal__list-add-contact {
   margin: 0;
+  padding: 0;
 }
 
 .modal__item {
@@ -479,6 +495,12 @@ td .contacts-ico-btn {
   box-shadow: none;
 }
 
+.spinner-border-sm {
+  border-top-color: var(--color_white);
+  border-bottom-color: var(--color_white);
+  border-left-color: var(--color_white);
+}
+
 .modal__btn-cancel {
   margin: 0 auto;
   margin-bottom: 25px;
@@ -494,6 +516,30 @@ td .contacts-ico-btn {
 
 .modal__btn-cancel:hover {
   color: #F06A4D;
+}
+
+/* Client card */
+
+.modal-content-card {
+  border: none;
+}
+
+.modal__item-card {
+  padding: 8px 30px;
+}
+
+.modal__item-card:last-child {
+  margin-bottom: 0;
+}
+
+.input-group-card-link {
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: 768px;
+}
+
+.btn-modal-card {
+  margin: 0;
 }
 
 @media (max-width: 767px) {
